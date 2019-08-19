@@ -1,0 +1,241 @@
+{
+  "format_version" : 1,
+  "label_template": "${COUNT}",
+  "enable_pipeline_locking": false,
+  "name": "myportfolio-message-producer",
+  "group" : "devops",
+  "tracking_tool": null,
+  "timer": null,
+  "environment_variables": [],
+  "parameters": [
+    {
+      "name": "TESTING",
+      "value": "false"
+    }
+  ],
+  "materials": [
+    {
+      "type": "git",
+      "url": "https://gitea-ci-cd.apps.balt1.okd.14west.io/lzuccarelli/myportfolio-message-producer.git",
+      "destination": null,
+      "filter": null,
+      "name": "scm",
+      "auto_update": true,
+      "branch": "master",
+      "submodule_folder": null
+    }
+  ],
+  "stages": [
+    {
+      "name": "checkout_scm",
+      "fetch_materials": true,
+      "clean_working_directory": false,
+      "never_cleanup_artifacts": false,
+      "approval": null,
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "scm_exec",
+          "run_instance_count": null,
+          "timeout": 0,
+          "environment_variables": [],
+          "resources": null, 
+          "tasks": [
+            {
+              "type": "exec",
+              "on_cancel": {
+                "type": "exec",
+                "command": "ls",
+                "working_directory": null
+              },
+              "command": "echo",
+              "arguments": [
+                "checkout latest from master"
+              ],
+              "working_directory": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "compile",
+      "fetch_materials": false,
+      "clean_working_directory": false,
+      "never_cleanup_artifacts": false,
+      "approval": null,
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "compile_exec",
+          "run_instance_count": null,
+          "timeout": 0,
+          "environment_variables": [],
+          "resources": null, 
+          "tasks": [
+            {
+              "type": "exec",
+              "command": "echo",
+              "arguments": [
+                "Executing golang compile"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "go",
+              "arguments": [
+                "get",
+                "github.com/gorilla/mux"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "go",
+              "arguments": [
+                "get",
+                "github.com/microlib/simple"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "go",
+              "arguments": [
+                "get",
+                "github.com/Shopify/sarama"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "go",
+              "arguments": [
+                "build",
+                "-o",
+                "microservice",
+                "."
+              ],
+              "working_directory": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "test",
+      "fetch_materials": false,
+      "clean_working_directory": false,
+      "never_cleanup_artifacts": false,
+      "approval": null,
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "test_exec",
+          "run_instance_count": null,
+          "timeout": 0,
+          "environment_variables": [],
+          "resources": null, 
+          "tasks": [
+            {
+              "type": "exec",
+              "command": "echo",
+              "arguments": [
+                "Executing golang unit tests"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "go",
+              "arguments": [
+                "test",
+                "-v",
+                "schema.go",
+                "handlers.go",
+                "handlers_test.go",
+                "-coverprofile",
+                "tests/results/cover.out"
+              ],
+              "working_directory": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sonarqube",
+      "fetch_materials": false,
+      "clean_working_directory": false,
+      "never_cleanup_artifacts": false,
+      "approval": null,
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "sonarqube_exec",
+          "run_instance_count": null,
+          "timeout": 0,
+          "environment_variables": [],
+          "resources": null, 
+          "tasks": [
+            {
+              "type": "exec",
+              "command": "echo",
+              "arguments": [
+                "Executing sonarqube scanner"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "/sonarqube/bin/sonar-scanner",
+              "arguments": [
+                "-Dsonar.projectKey=myportfolio-message-producer",
+                "-Dsonar.sources=.",
+                "-Dsonar.language=go",
+                "-Dsonar.host.url=https://sonarqube-ci-cd.apps.balt1.okd.14west.io",
+                "-Dsonar.login=${SONARQUBE_TOKEN}",
+                "-Dsonar.go.coverage.reportPaths=tests/results/cover.out",
+                "-Dsonar.exclusions=**/*_test.go,**/vendor/**,**/.git/**,**/img/**,**/tests/**,**/results/**,**/bin/**,**/swaggerui/**,microservice.go,connectors.go,*.xml,*.txt,*.json,*.yml,*.md,Dockerfile"
+              ],
+              "working_directory": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "build-deploy",
+      "fetch_materials": false,
+      "clean_working_directory": false,
+      "never_cleanup_artifacts": false,
+      "approval": null,
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "build_exec",
+          "run_instance_count": null,
+          "timeout": 0,
+          "environment_variables": [],
+          "resources": null, 
+          "tasks": [
+            {
+              "type": "exec",
+              "command": "echo",
+              "arguments": [
+                "Building UBI golang image and push to registry (optional deploy)"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "./build-deploy.sh",
+              "working_directory": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

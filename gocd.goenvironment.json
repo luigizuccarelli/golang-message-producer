@@ -1,0 +1,12 @@
+{
+  "name": "dev",
+  "environment_variables": [
+    {
+      "name": "OC_USER",
+      "value": "lzuccarelli"
+    }
+  ],
+  "pipelines": [
+    "myportfolio-message-producer"
+  ]
+}

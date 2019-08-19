@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko-myportfolio-message-producer
+spec:
+  parallelism: 1    
+  completions: 1    
+  template:         
+    metadata:
+      name: kaniko-myportfolio-message-producer
+    spec:
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:latest
+        args: [
+          "--dockerfile=/godata/pipelines/myportfolio-message-producer/Dockerfile",
+          "--context=/godata/pipelines/myportfolio-message-producer",
+          "--destination=lzuccarelli/myportfolio-message-producer:1.12.5"
+        ]
+        volumeMounts:
+        - mountPath: /godata
+          name: gocdagent-data
+        - mountPath: /kaniko/.docker/config.json
+          name: docker-creds
+          subPath: config.json
+        env:
+        - name: DESITINATION
+        value: lzuccarelli/myportfolio-message-producer:1.12.5
+      restartPolicy: Never   
+      volumes:
+      - name: gocdagent-data
+        persistentVolumeClaim:
+          claimName: gocdagent
+      - name: docker-creds
+        configMap:
+          defaultMode: 420
+          name: configcontent
+      backoffLimit: 1
