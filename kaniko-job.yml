@@ -1,21 +1,21 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kaniko-myportfolio-message-producer
+  name: kaniko-trackmate-message-producer
 spec:
   parallelism: 1    
   completions: 1    
   template:         
     metadata:
-      name: kaniko-myportfolio-message-producer
+      name: kaniko-trackmate-message-producer
     spec:
       containers:
       - name: kaniko
         image: gcr.io/kaniko-project/executor:latest
         args: [
-          "--dockerfile=/godata/pipelines/myportfolio-message-producer/Dockerfile",
-          "--context=/godata/pipelines/myportfolio-message-producer",
-          "--destination=nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/myportfolio-message-producer:1.13.1"
+          "--dockerfile=/godata/pipelines/trackmate-message-producer/Dockerfile",
+          "--context=/godata/pipelines/trackmate-message-producer",
+          "--destination=nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.13.1"
         ]
         volumeMounts:
         - mountPath: /godata
@@ -25,7 +25,7 @@ spec:
           subPath: config.json
         env:
         - name: DESITINATION
-        value: nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/myportfolio-message-producer:1.13.1
+        value: nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.13.1
       restartPolicy: Never   
       volumes:
       - name: gocdagent-data

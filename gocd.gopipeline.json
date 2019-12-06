@@ -230,7 +230,6 @@
               "arguments": [
                 "build-image"
               ],
-
               "working_directory": null
             }
           ]
