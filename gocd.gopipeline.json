@@ -191,7 +191,7 @@
             },
             {
               "type": "exec",
-              "command": "./gocd-cicd.shr",
+              "command": "./gocd-cicd.sh",
               "arguments": [
                 "sonarqube"
               ],
