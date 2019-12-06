@@ -23,8 +23,8 @@ func startHttpServer(cd ConnectionData) *http.Server {
 
 	// set the router and endpoints
 	r := mux.NewRouter()
-	r.HandleFunc("/streamdata", Streamer).Methods("POST")
-	r.HandleFunc("/sys/info/isalive", IsAlive).Methods("GET", "OPTIONS")
+	r.HandleFunc("/api/v1/streamdata", Streamer).Methods("POST", "OPTIONS")
+	r.HandleFunc("/api/v2/sys/info/isalive", IsAlive).Methods("GET", "OPTIONS")
 	http.Handle("/", r)
 
 	// start our server (concurrent)
@@ -101,22 +101,4 @@ func main() {
 	logger.Info("Server shutdown successfully")
 	os.Exit(code)
 
-}
-
-func checkEnvar(name string, required bool) {
-	if os.Getenv(name) == "" {
-		if required {
-			logger.Error(fmt.Sprintf("%s envar is mandatory please set it", name))
-			os.Exit(-1)
-		} else {
-			logger.Error(fmt.Sprintf("%s envar is empty please set it", name))
-		}
-	}
-}
-
-func ValidateEnvars() {
-	checkEnvar("LOG_LEVEL", false)
-	checkEnvar("SERVER_PORT", false)
-	checkEnvar("KAFKA_BROKERS", true)
-	checkEnvar("TOPIC", true)
 }

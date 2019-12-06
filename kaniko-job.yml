@@ -15,7 +15,7 @@ spec:
         args: [
           "--dockerfile=/godata/pipelines/myportfolio-message-producer/Dockerfile",
           "--context=/godata/pipelines/myportfolio-message-producer",
-          "--destination=lzuccarelli/myportfolio-message-producer:1.12.5"
+          "--destination=nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/myportfolio-message-producer:1.13.1"
         ]
         volumeMounts:
         - mountPath: /godata
@@ -25,7 +25,7 @@ spec:
           subPath: config.json
         env:
         - name: DESITINATION
-        value: lzuccarelli/myportfolio-message-producer:1.12.5
+        value: nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/myportfolio-message-producer:1.13.1
       restartPolicy: Never   
       volumes:
       - name: gocdagent-data

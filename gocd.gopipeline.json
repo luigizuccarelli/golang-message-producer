@@ -2,7 +2,7 @@
   "format_version" : 1,
   "label_template": "${COUNT}",
   "enable_pipeline_locking": false,
-  "name": "myportfolio-message-producer",
+  "name": "trackmate-message-producer",
   "group" : "devops",
   "tracking_tool": null,
   "timer": null,
@@ -16,7 +16,7 @@
   "materials": [
     {
       "type": "git",
-      "url": "https://gitea-ci-cd.apps.balt1.okd.14west.io/lzuccarelli/myportfolio-message-producer.git",
+      "url": "http://cicd:cicd01@gitea.cicd.svc.cluster.local:3000/cicd/trackmate-message-producer.git",
       "destination": null,
       "filter": null,
       "name": "scm",
@@ -189,15 +189,9 @@
             },
             {
               "type": "exec",
-              "command": "/sonarqube/bin/sonar-scanner",
+              "command": "./gocd-cicd.shr",
               "arguments": [
-                "-Dsonar.projectKey=myportfolio-message-producer",
-                "-Dsonar.sources=.",
-                "-Dsonar.language=go",
-                "-Dsonar.host.url=https://sonarqube-ci-cd.apps.balt1.okd.14west.io",
-                "-Dsonar.login=${SONARQUBE_TOKEN}",
-                "-Dsonar.go.coverage.reportPaths=tests/results/cover.out",
-                "-Dsonar.exclusions=**/*_test.go,**/vendor/**,**/.git/**,**/img/**,**/tests/**,**/results/**,**/bin/**,**/swaggerui/**,microservice.go,connectors.go,*.xml,*.txt,*.json,*.yml,*.md,Dockerfile"
+                "sonarqube"
               ],
               "working_directory": null
             }
@@ -230,7 +224,11 @@
             },
             {
               "type": "exec",
-              "command": "./build-deploy.sh",
+              "command": "./gocd-cicd.sh",
+              "arguments": [
+                "build-image"
+              ],
+
               "working_directory": null
             }
           ]

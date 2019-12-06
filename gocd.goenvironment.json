@@ -7,6 +7,6 @@
     }
   ],
   "pipelines": [
-    "myportfolio-message-producer"
+    "trackmate-message-producer"
   ]
 }
