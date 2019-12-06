@@ -57,7 +57,7 @@ func TestEnvars(t *testing.T) {
 			os.Setenv("URL", "http://test.com")
 			os.Setenv("TOKEN", "dsafsdfdsf")
 			os.Setenv("VERSION", "1.0.3")
-			os.Setenv("BROKERS", "localhost:9092")
+			os.Setenv("KAFKA_BROKERS", "localhost:9092")
 			os.Setenv("TOPIC", "test")
 			os.Setenv("CONNECTOR", "NA")
 			err = ValidateEnvars()

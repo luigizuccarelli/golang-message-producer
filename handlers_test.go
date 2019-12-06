@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/microlib/simple"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -13,7 +12,6 @@ import (
 )
 
 var (
-	logger     simple.Logger
 	connectors Clients
 	counter    int = 0
 )
