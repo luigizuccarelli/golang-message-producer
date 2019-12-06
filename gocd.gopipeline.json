@@ -153,6 +153,8 @@
                 "test",
                 "-v",
                 "schema.go",
+                "validate.go",
+                "validate_test.go",
                 "handlers.go",
                 "handlers_test.go",
                 "-coverprofile",
