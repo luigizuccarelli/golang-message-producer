@@ -3,7 +3,7 @@
 # All parameter fields are required for the script to execute
 
 # declare some variables
-project="trackmate-message-producerr"
+PROJECT="trackmate-message-producer"
 jobname="kaniko-trackmate-message-producer"
 deploymentconfig="trackmate-message-producer.json"
 namespace="myportfolio"
@@ -30,17 +30,36 @@ fi
 
 # list some gocd variables
 echo -e " "
-echo "GOCD job name         ${GO_JOB_NAME}"
-echo "GOCD pipeline name    ${GO_PIPELINE_NAME}"
-echo "GOCD pipeline counter ${GO_PIPELINE_COUNTER}"
-echo "GOCD pipeline label   ${GO_PIPELINE_LABEL}"
+echo "PROJECT                 ${PROJECT}"
+echo "SONARQUBE_HOST          ${SONARQUBE_HOST}"
+echo "SONARQUBE_SCANNER_PATH  ${SONARQUBE_SCANNER_PATH}"
+echo "GOCD job name           ${GO_JOB_NAME}"
+echo "GOCD pipeline name      ${GO_PIPELINE_NAME}"
+echo "GOCD pipeline counter   ${GO_PIPELINE_COUNTER}"
+echo "GOCD pipeline label     ${GO_PIPELINE_LABEL}"
 echo -e " " 
 
 if [ "$1" = "sonarqube" ]
 then
-    echo -e "\nSonarqube scanning project"
-    /sonarqube/bin/sonar-scanner -Dsonar.projectKey=${project} -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_HOST} -Dsonar.login=${SONARQUBE_USER} -Dsonar.password=${SONARQUBE_PASSWORD} -Dsonar.go.coverage.reportPaths=tests/results/cover.out -Dsonar.exclusions=vendor/**,*_test.go,main.go,connectors.go,schema.go,tests/**,*.json,*.txt,*.yml,*.xml,*.sh,Dockerfile -Dsonar.issuesReport.json.enable=true -Dsonar.report.export.path=sonar-report.json -Dsonar.issuesReport.console.enable=true | tee output.txt && \
-    result=$(cat output.txt | grep -o "INFO: EXECUTION SUCCESS") &&  echo ${result} | grep -o 'INFO: EXECUTION SUCCESS' && echo "PASSED" && exit 0 || echo "FAILED" && exit -1
+   echo -e "\nSonarqube scanning project"
+   rm -rf output.json
+   touch output.json
+   fs=$(stat --printf='%s\n' output.json)
+   result="\"PENDING\""
+   ${SONARQUBE_SCANNER_PATH}bin/sonar-scanner -Dsonar.projectKey=${PROJECT} -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_HOST} -Dsonar.login=${SONARQUBE_USER} -Dsonar.password=${SONARQUBE_PASSWORD} -Dsonar.go.coverage.reportPaths=tests/results/cover.out -Dsonar.exclusions=vendor/**,*_test.go,main.go,connectors.go,schema.go,swaggerui/**,tests/**,*.json,*.txt,*.yml,*.xml,*.sh,Dockerfile -Dsonar.issuesReport.json.enable=true -Dsonar.report.export.path=sonar-report.json -Dsonar.issuesReport.console.enable=true | tee response.txt
+   # response text includes the url to view the json payload of the sonar scanner results
+   url=$(cat response.txt | grep -o "${SONARQUBE_HOST}/api/ce/task?id=[A-Za-z0-9\-]*")
+   # loop until we have a valid payload
+   while [[ ${fs} -eq 0 ]] && [[ "${result}" = "\"PENDING\"" ]];
+   do
+     sleep 2;
+     curl -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Authorization: Basic YWRtaW46Yml0bmFtaQ==' "${url}" > output.json;
+     fs=$(stat --printf='%s\n' output.json);
+     result=$(cat output.json | jq '.task.status');
+     echo "${fs} ${result}";
+   done
+   # check to see if the job was succesful
+   echo ${result} | grep -o "SUCCESS" && echo "PASSED" && exit 0 || echo "FAILED" && exit 1
 fi
 
 if [ "$1" = "build-image" ]

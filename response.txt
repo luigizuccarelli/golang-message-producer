@@ -1,0 +1,68 @@
+INFO: Scanner configuration file: /home/lzuccarelli/Programs/sonar-scanner-3.3.0.1492-linux/conf/sonar-scanner.properties
+INFO: Project root configuration file: NONE
+INFO: SonarQube Scanner 3.3.0.1492
+INFO: Java 1.8.0_121 Oracle Corporation (64-bit)
+INFO: Linux 5.3.13-200.fc30.x86_64 amd64
+INFO: User cache: /home/lzuccarelli/.sonar/cache
+INFO: SonarQube server 7.9.1
+INFO: Default locale: "en_US", source code encoding: "UTF-8" (analysis is platform dependent)
+WARN: SonarScanner will require Java 11+ to run starting in SonarQube 8.x
+INFO: Load global settings
+INFO: Load global settings (done) | time=503ms
+INFO: Server id: 4C31D11C-AW6ymfSJMNprVwWENstz
+INFO: User cache: /home/lzuccarelli/.sonar/cache
+INFO: Load/download plugins
+INFO: Load plugins index
+INFO: Load plugins index (done) | time=422ms
+INFO: Load/download plugins (done) | time=451ms
+INFO: Process project properties
+INFO: Execute project builders
+INFO: Execute project builders (done) | time=4ms
+INFO: Project key: trackmate-message-producer
+INFO: Base dir: /home/lzuccarelli/Projects/trackmate/trackmate-message-producer
+INFO: Working dir: /home/lzuccarelli/Projects/trackmate/trackmate-message-producer/.scannerwork
+INFO: Load project settings for component key: 'trackmate-message-producer'
+INFO: Load project settings for component key: 'trackmate-message-producer' (done) | time=415ms
+INFO: Load quality profiles
+INFO: Load quality profiles (done) | time=493ms
+INFO: Load active rules
+INFO: Load active rules (done) | time=7026ms
+INFO: Indexing files...
+INFO: Project configuration:
+INFO:   Excluded sources: vendor/**, *_test.go, main.go, connectors.go, schema.go, swaggerui/**, tests/**, *.json, *.txt, *.yml, *.xml, *.sh, Dockerfile
+INFO: 4 files indexed
+INFO: 0 files ignored because of inclusion/exclusion patterns
+INFO: 0 files ignored because of scm ignore settings
+INFO: Quality profile for go: Sonar way
+INFO: ------------- Run sensors on module trackmate-message-producer
+INFO: Load metrics repository
+INFO: Load metrics repository (done) | time=408ms
+INFO: Sensor JaCoCo XML Report Importer [jacoco]
+INFO: Sensor JaCoCo XML Report Importer [jacoco] (done) | time=3ms
+INFO: Sensor SonarGo [go]
+INFO: Load project repositories
+INFO: Load project repositories (done) | time=413ms
+INFO: Load coverage report from '/home/lzuccarelli/Projects/trackmate/trackmate-message-producer/tests/results/cover.out'
+INFO: Sensor SonarGo [go] (done) | time=627ms
+INFO: Sensor JavaXmlSensor [java]
+INFO: Sensor JavaXmlSensor [java] (done) | time=4ms
+INFO: Sensor HTML [web]
+INFO: Sensor HTML [web] (done) | time=11ms
+INFO: ------------- Run sensors on project
+INFO: Sensor Zero Coverage Sensor
+INFO: Sensor Zero Coverage Sensor (done) | time=0ms
+INFO: Calculating CPD for 2 files
+INFO: CPD calculation finished
+INFO: Analysis report generated in 69ms, dir size=79 KB
+INFO: Analysis report compressed in 14ms, zip size=14 KB
+INFO: Analysis report uploaded in 417ms
+INFO: ANALYSIS SUCCESSFUL, you can browse http://ec2-52-19-191-18.eu-west-1.compute.amazonaws.com/dashboard?id=trackmate-message-producer
+INFO: Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+INFO: More about the report processing at http://ec2-52-19-191-18.eu-west-1.compute.amazonaws.com/api/ce/task?id=AW7wZJAfs5vUu-aMlZmI
+INFO: Analysis total time: 11.692 s
+INFO: ------------------------------------------------------------------------
+INFO: EXECUTION SUCCESS
+INFO: ------------------------------------------------------------------------
+INFO: Total time: 13.442s
+INFO: Final Memory: 20M/235M
+INFO: ------------------------------------------------------------------------
