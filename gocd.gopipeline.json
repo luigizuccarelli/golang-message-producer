@@ -3,7 +3,7 @@
   "label_template": "${COUNT}",
   "enable_pipeline_locking": false,
   "name": "trackmate-message-producer",
-  "group" : "devops",
+  "group" : "Trackmate",
   "tracking_tool": null,
   "timer": null,
   "environment_variables": [],
