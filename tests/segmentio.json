@@ -1,0 +1,85 @@
+{
+  "id": "ajs-00004e74def812c689709f00e9a4662c",
+  "anonymousId": "2f67fffe-e916-471d-90e5-3088d28c1ef5",
+  "context": {
+    "campaign": {
+      "content": "dr20200420_buyers",
+      "name": "roc",
+      "source": "mail"
+    },
+    "ip": "141.168.43.248",
+    "library": {
+      "name": "analytics.js",
+      "version": "3.11.4"
+    },
+    "locale": "en-GB",
+    "page": {
+      "path": "/p/w4roczerohour/EROCW447/",
+      "referrer": "",
+      "search": "?customerNumber=000111677766&campaignId=a5c9819c-e06c-4350-9261-a07fc83c8f08&r=eml&experimentId=d1b940c7-ad93-40f9-a52b-8b815a625738&vid=XUSeBx&utm_campaign=roc&affiliate=ftm&utm_source=mail&pagetype=promo&pagename=landingpage&utm_medium=email&utm_content=dr20200420_buyers&bsft_clkid=247c7c70-1ea3-46ae-b58d-85343824c33e&bsft_uid=7d3ad414-f88c-4be2-b0e8-6ae7b9c66aa0&bsft_mid=0df380f6-c2b4-48ea-98c7-a0d7cd341b59&bsft_eid=d1b940c7-ad93-40f9-a52b-8b815a625738&bsft_utid=7d3ad414-f88c-4be2-b0e8-6ae7b9c66aa0-DR-AUS&bsft_link_id=11&bsft_mime_type=html&bsft_ek=2020-04-20T04%3A55%3A40Z&h=true",
+      "title": "Surviving ‘Zero Hour’",
+      "url": "https://pro.agorafinancial.com.au/p/w4roczerohour/EROCW447/?customerNumber=000111677766&campaignId=a5c9819c-e06c-4350-9261-a07fc83c8f08&r=eml&experimentId=d1b940c7-ad93-40f9-a52b-8b815a625738&vid=XUSeBx&utm_campaign=roc&affiliate=ftm&utm_source=mail&pagetype=promo&pagename=landingpage&utm_medium=email&utm_content=dr20200420_buyers&bsft_clkid=247c7c70-1ea3-46ae-b58d-85343824c33e&bsft_uid=7d3ad414-f88c-4be2-b0e8-6ae7b9c66aa0&bsft_mid=0df380f6-c2b4-48ea-98c7-a0d7cd341b59&bsft_eid=d1b940c7-ad93-40f9-a52b-8b815a625738&bsft_utid=7d3ad414-f88c-4be2-b0e8-6ae7b9c66aa0-DR-AUS&bsft_link_id=11&bsft_mime_type=html&bsft_ek=2020-04-20T04%3A55%3A40Z&h=true"
+    },
+    "userAgent": "Mozilla/5.0 (Linux; Android 7.0; SM-T819Y) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36"
+  },
+  "event": "scroll_depth",
+  "integrations": {},
+  "messageId": "ajs-00004e74def812c689709f00e9a4662c",
+  "originalTimestamp": "2020-04-20T05:06:20.024Z",
+  "properties": {
+    "irisPlusData": {
+      "CREATIVE.name": "",
+      "CREATIVE.status": "",
+      "EFFORT.advertisement_name": "",
+      "EFFORT.campaign": "",
+      "EFFORT.date": "",
+      "EFFORT.domain": "",
+      "EFFORT.effort_destination": "",
+      "EFFORT.id": "",
+      "EFFORT.journey_name": "",
+      "EFFORT.promocode": "",
+      "EFFORT.type": "",
+      "EFFORT.what_are_you_promoting": "",
+      "EFFORT.where_is_the_marketing_going": "",
+      "FORM_INFO.address": "",
+      "FORM_INFO.address2": "",
+      "FORM_INFO.address3": "",
+      "FORM_INFO.city": "",
+      "FORM_INFO.companyName": "",
+      "FORM_INFO.countryCode": "",
+      "FORM_INFO.countryName": "",
+      "FORM_INFO.email": "",
+      "FORM_INFO.faxNumber": "",
+      "FORM_INFO.firstName": "",
+      "FORM_INFO.lastName": "",
+      "FORM_INFO.phoneNumber": "",
+      "FORM_INFO.phoneNumber2": "",
+      "FORM_INFO.phoneNumber3": "",
+      "FORM_INFO.postalCode": "",
+      "FORM_INFO.stateCode": "",
+      "FORM_INFO.stateName": "",
+      "FORM_INFO.suffix": "",
+      "FORM_INFO.title": "",
+      "JOURNEY.creative_sequence": "",
+      "JOURNEY.name": "",
+      "JOURNEY.status": ""
+    },
+    "type": "scroll_depth",
+    "utm_variable": {
+      "affiliate": "ftm",
+      "pagetype": "promo",
+      "promoCode": "",
+      "utm_campaign": "roc",
+      "utm_medium": "email",
+      "utm_content": "dr20200420_buyers",
+      "utm_source": "mail"
+    },
+    "value": 79
+  },
+  "receivedAt": "2020-04-20T05:06:20.281Z",
+  "sentAt": "2020-04-20T05:06:20.053Z",
+  "timestamp": "2020-04-20T05:06:20.252Z",
+  "type": "track",
+  "userId": "",
+  "version": 2
+}

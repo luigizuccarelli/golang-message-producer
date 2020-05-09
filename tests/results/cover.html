@@ -54,7 +54,9 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">/home/lzuccarelli/Projects/myportfolio/myportfolio-message-producer/handlers.go (100.0%)</option>
+				<option value="file0">gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/handlers/handlers.go (100.0%)</option>
+				
+				<option value="file1">gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/validator/validate.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -68,7 +70,7 @@
 		</div>
 		<div id="content">
 		
-		<pre class="file" id="file0" style="display: none">package main
+		<pre class="file" id="file0" style="display: none">package handlers
 
 import (
         "encoding/json"
@@ -76,7 +78,9 @@ import (
         "io/ioutil"
         "net/http"
         "os"
-        "strings"
+
+        "gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/connectors"
+        "gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/schema"
 )
 
 const (
@@ -84,27 +88,29 @@ const (
         APPLICATIONJSON string = "application/json"
 )
 
-// Streamer a http response and request for a message producer
-// @param - http.ResponseWriter (used to send back response)
-// @param - http.Request object
-func Streamer(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+// StreamHandler a http response and request for a message producer
+func StreamHandler(w http.ResponseWriter, r *http.Request, conn connectors.Clients) <span class="cov8" title="1">{
 
-        var response Response
+        var response *schema.Response
 
         addHeaders(w, r)
-        handleOptions(w, r)
+        if r.Method == "OPTIONS" </span><span class="cov8" title="1">{
+                w.WriteHeader(http.StatusOK)
+                fmt.Fprintf(w, "")
+                return
+        }</span>
 
-        body, err := ioutil.ReadAll(r.Body)
+        <span class="cov8" title="1">body, err := ioutil.ReadAll(r.Body)
         if err != nil </span><span class="cov8" title="1">{
-                response = Response{StatusCode: "500", Status: "ERROR", Message: "Could not read body data " + err.Error()}
+                response = &amp;schema.Response{StatusCode: "500", Status: "ERROR", Message: "Could not read body data " + err.Error()}
                 w.WriteHeader(http.StatusInternalServerError)
         }</span> else<span class="cov8" title="1"> {
-                err = connectors.SendMessageSync(body)
+                err = conn.SendMessageSync(body)
                 if err != nil </span><span class="cov8" title="1">{
-                        response = Response{StatusCode: "500", Status: "ERROR", Message: "Could not send stream data " + err.Error()}
+                        response = &amp;schema.Response{StatusCode: "500", Status: "ERROR", Message: "Could not send stream data " + err.Error()}
                         w.WriteHeader(http.StatusInternalServerError)
                 }</span> else<span class="cov8" title="1"> {
-                        response = Response{StatusCode: "200", Status: "OK", Message: "Stream data sent successfully"}
+                        response = &amp;schema.Response{StatusCode: "200", Status: "OK", Message: "Stream data sent successfully"}
                 }</span>
         }
 
@@ -115,38 +121,62 @@ func Streamer(w http.ResponseWriter, r *http.Request) <span class="cov8" title="
 // IsAlive a http response and request wrapper for health endpoint checks
 // It takes a both response and request objects and returns void
 func IsAlive(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
-        addHeaders(w, r)
-        handleOptions(w, r)
-        logger.Trace(fmt.Sprintf("used to mask cc %v", r))
         fmt.Fprintf(w, "{\"version\": \""+os.Getenv("VERSION")+"\"}")
 }</span>
 
 // headers (with cors) utility
 func addHeaders(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
-        var request []string
-        for name, headers := range r.Header </span><span class="cov8" title="1">{
-                name = strings.ToLower(name)
-                for _, h := range headers </span><span class="cov8" title="1">{
-                        request = append(request, fmt.Sprintf("%v: %v", name, h))
-                }</span>
-        }
-
-        <span class="cov8" title="1">logger.Trace(fmt.Sprintf("Headers : %s", request))
-
         w.Header().Set(CONTENTTYPE, APPLICATIONJSON)
         // use this for cors
         w.Header().Set("Access-Control-Allow-Origin", "*")
         w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-        w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")</span>
+        w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package validator
+
+import (
+        "errors"
+        "fmt"
+        "os"
+        "strconv"
+        "strings"
+
+        "github.com/microlib/simple"
+)
+
+// checkEnvars - private function, iterates through each item and checks the required field
+func checkEnvar(item string, logger *simple.Logger) error <span class="cov8" title="1">{
+        name := strings.Split(item, ",")[0]
+        required, _ := strconv.ParseBool(strings.Split(item, ",")[1])
+        logger.Trace(fmt.Sprintf("name %s : required %t", name, required))
+        if os.Getenv(name) == "" </span><span class="cov8" title="1">{
+                if required </span><span class="cov8" title="1">{
+                        logger.Error(fmt.Sprintf("%s envar is mandatory please set it", name))
+                        return errors.New(fmt.Sprintf("%s envar is mandatory please set it", name))
+                }</span> else<span class="cov8" title="1"> {
+                        logger.Error(fmt.Sprintf("%s envar is empty please set it", name))
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
 }
 
-// simple options handler
-func handleOptions(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
-        if r.Method == "OPTIONS" </span><span class="cov8" title="1">{
-                w.WriteHeader(http.StatusOK)
-                fmt.Fprintf(w, "")
-        }</span>
-        <span class="cov8" title="1">return</span>
+// ValidateEnvars : public call that groups all envar validations
+// These envars are set via the openshift template
+func ValidateEnvars(logger *simple.Logger) error <span class="cov8" title="1">{
+        items := []string{
+                "LOG_LEVEL,false",
+                "SERVER_PORT,true",
+                "KAFKA_BROKERS,true",
+                "TOPIC,true",
+        }
+        for x, _ := range items </span><span class="cov8" title="1">{
+                if err := checkEnvar(items[x], logger); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
 }
 </pre>
 		
