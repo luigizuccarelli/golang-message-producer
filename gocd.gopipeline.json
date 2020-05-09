@@ -59,71 +59,6 @@
       ]
     },
     {
-      "name": "compile",
-      "fetch_materials": false,
-      "clean_working_directory": false,
-      "never_cleanup_artifacts": false,
-      "approval": null,
-      "environment_variables": [],
-      "jobs": [
-        {
-          "name": "compile_exec",
-          "run_instance_count": null,
-          "timeout": 0,
-          "environment_variables": [],
-          "resources": null, 
-          "tasks": [
-            {
-              "type": "exec",
-              "command": "echo",
-              "arguments": [
-                "Executing golang compile"
-              ],
-              "working_directory": null
-            },
-            {
-              "type": "exec",
-              "command": "go",
-              "arguments": [
-                "get",
-                "github.com/gorilla/mux"
-              ],
-              "working_directory": null
-            },
-            {
-              "type": "exec",
-              "command": "go",
-              "arguments": [
-                "get",
-                "github.com/microlib/simple"
-              ],
-              "working_directory": null
-            },
-            {
-              "type": "exec",
-              "command": "go",
-              "arguments": [
-                "get",
-                "github.com/Shopify/sarama"
-              ],
-              "working_directory": null
-            },
-            {
-              "type": "exec",
-              "command": "go",
-              "arguments": [
-                "build",
-                "-o",
-                "microservice",
-                "."
-              ],
-              "working_directory": null
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "test",
       "fetch_materials": false,
       "clean_working_directory": false,
@@ -142,23 +77,82 @@
               "type": "exec",
               "command": "echo",
               "arguments": [
+                "Executing golang clean"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "make",
+              "arguments": [
+                "clean"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "echo",
+              "arguments": [
                 "Executing golang unit tests"
               ],
               "working_directory": null
             },
             {
               "type": "exec",
-              "command": "go",
+              "command": "make",
               "arguments": [
-                "test",
-                "-v",
-                "schema.go",
-                "validate.go",
-                "validate_test.go",
-                "handlers.go",
-                "handlers_test.go",
-                "-coverprofile",
-                "tests/results/cover.out"
+                "test"
+              ],
+              "working_directory": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "compile",
+      "fetch_materials": false,
+      "clean_working_directory": false,
+      "never_cleanup_artifacts": false,
+      "approval": null,
+      "environment_variables": [],
+      "jobs": [
+        {
+          "name": "compile_exec",
+          "run_instance_count": null,
+          "timeout": 0,
+          "environment_variables": [],
+          "resources": null, 
+          "tasks": [
+            {
+              "type": "exec",
+              "command": "echo",
+              "arguments": [
+                "Executing golang build (compile)"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "make",
+              "arguments": [
+                "build"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "echo",
+              "arguments": [
+                "Executing golang cover profile"
+              ],
+              "working_directory": null
+            },
+            {
+              "type": "exec",
+              "command": "make",
+              "arguments": [
+                "cover"
               ],
               "working_directory": null
             }
