@@ -30,7 +30,7 @@ spec:
       volumes:
       - name: gocdagent-data
         persistentVolumeClaim:
-          claimName: gocdagent
+          claimName: gocdagent-node-and-go
       - name: docker-creds
         configMap:
           defaultMode: 420
