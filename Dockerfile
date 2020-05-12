@@ -2,6 +2,7 @@ FROM registry.access.redhat.com/ubi8/ubi-init:latest
 
 LABEL maintainer="lzuccarelli@tfd.ie"
 
+RUN dnf remove -y subscription-manager 
 # gcc for cgo
 RUN dnf install -y git gcc make && rm -rf /var/lib/apt/lists/*
 
@@ -13,11 +14,10 @@ RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
 	&& echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - \
 	&& tar -C /usr/local -xzf golang.tar.gz \
 	&& rm golang.tar.gz
-RUN dnf remove -y subscription-manager 
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
-COPY bin/lib* uid_entrypoint.sh microservice /go/
+COPY bin/lib* uid_entrypoint.sh build/microservice /go/
 
 RUN rpm -iv /go/librdkafka-0.11.5-1.el8.x86_64.rpm && rm -rf /go/lib*
 

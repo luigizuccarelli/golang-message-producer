@@ -17,7 +17,7 @@ clean:
 	go clean ./...
 
 container:
-	podman build -t nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.14.2 .
+	podman build -t tfld-docker-prd-local.repo.14west.io/trackmate-message-producer:1.14.2 .
 
 push:
-	podman push nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.14.2 
+	podman push tfld-docker-prd-local.repo.14west.io/trackmate-message-producer:1.14.2 
