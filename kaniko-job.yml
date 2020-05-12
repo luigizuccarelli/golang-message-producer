@@ -15,7 +15,7 @@ spec:
         args: [
           "--dockerfile=/godata/pipelines/trackmate-message-producer/Dockerfile",
           "--context=/godata/pipelines/trackmate-message-producer",
-          "--destination=nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.13.1"
+          "--destination=tfld-docker-prd-local.repo.14west.io/trackmate-message-producer:1.14.2"
         ]
         volumeMounts:
         - mountPath: /godata
@@ -25,7 +25,7 @@ spec:
           subPath: config.json
         env:
         - name: DESITINATION
-        value: nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.13.1
+        value: tfld-docker-prd-local.repo.14west.io/trackmate-message-producer:1.14.2
       restartPolicy: Never   
       volumes:
       - name: gocdagent-data

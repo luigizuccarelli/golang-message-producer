@@ -1,6 +1,6 @@
 projectKey=trackmate-message-producer
-serverUrl=http://ec2-52-19-191-18.eu-west-1.compute.amazonaws.com
+serverUrl=http://ec2-3-248-27-131.eu-west-1.compute.amazonaws.com
 serverVersion=7.9.1.27448
-dashboardUrl=http://ec2-52-19-191-18.eu-west-1.compute.amazonaws.com/dashboard?id=trackmate-message-producer
-ceTaskId=AW7wZJAfs5vUu-aMlZmI
-ceTaskUrl=http://ec2-52-19-191-18.eu-west-1.compute.amazonaws.com/api/ce/task?id=AW7wZJAfs5vUu-aMlZmI
+dashboardUrl=http://ec2-3-248-27-131.eu-west-1.compute.amazonaws.com/dashboard?id=trackmate-message-producer
+ceTaskId=AXIEycBRlTthV8gxwcLc
+ceTaskUrl=http://ec2-3-248-27-131.eu-west-1.compute.amazonaws.com/api/ce/task?id=AXIEycBRlTthV8gxwcLc

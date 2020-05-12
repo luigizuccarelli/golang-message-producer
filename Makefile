@@ -16,8 +16,8 @@ clean:
 	rm -rf build/microservice
 	go clean ./...
 
-docker:
-	docker build -t nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/message-consumer-couchbase:1.13.1 .
+container:
+	podman build -t nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.14.2 .
 
 push:
-	docker push nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/message-consumer-couchbase:1.13.1 
+	podman push nexus-registry-nexus.apps.aws2-dev.ocp.14west.io/trackmate-message-producer:1.14.2 

@@ -44,7 +44,7 @@ func NewClientConnectors(logger *simple.Logger) Clients {
 
 	p, err := sarama.NewSyncProducer(brokerList, cfg)
 	if err != nil {
-		logger.Error(fmt.Sprintf("Failed to start Sarama producer %v:", err))
+		logger.Error(fmt.Sprintf("Failed to start Sarama producer : %v", err))
 	}
 
 	return &Connectors{Producer: p, Logger: logger, Name: "RealConnectors"}

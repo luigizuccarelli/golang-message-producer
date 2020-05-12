@@ -6,7 +6,7 @@
 PROJECT="trackmate-message-producer"
 jobname="kaniko-trackmate-message-producer"
 deploymentconfig="trackmate-message-producer.json"
-namespace="myportfolio"
+namespace="trackmate"
 
 
 # some variable checks
@@ -24,8 +24,15 @@ fi
 
 if [ -z ${OC_USERNAME} ]; 
 then
-  echo -e "\033[0;91mOC_TOKEN envar is not set please set it in the environments tab (secure envar) in GOCD\033[0m"
+  echo -e "\033[0;91mOC_USERNAME envar is not set please set it in the environments tab (secure envar) in GOCD\033[0m"
   exit -1
+fi
+
+if [ -z ${SONAR_TOKEN} ];
+then
+  SONAR_LOGIN="-Dsonar.host.url=${SONARQUBE_HOST} -Dsonar.login=${SONARQUBE_USER} -Dsonar.password=${SONARQUBE_PASSWORD}"
+else
+  SONAR_LOGIN="-Dsonar.host.url=${SONARQUBE_HOST} -Dsonar.login=${SONAR_TOKEN}"
 fi
 
 # list some gocd variables
@@ -46,7 +53,7 @@ then
    touch output.json
    fs=$(stat --printf='%s\n' output.json)
    result="\"PENDING\""
-   ${SONARQUBE_SCANNER_PATH}bin/sonar-scanner -Dsonar.projectKey=${PROJECT} -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_HOST} -Dsonar.login=${SONARQUBE_USER} -Dsonar.password=${SONARQUBE_PASSWORD} -Dsonar.go.coverage.reportPaths=tests/results/cover.out -Dsonar.exclusions=vendor/**,*_test.go,main.go,connectors.go,schema.go,swaggerui/**,tests/**,*.json,*.txt,*.yml,*.xml,*.sh,Dockerfile -Dsonar.issuesReport.json.enable=true -Dsonar.report.export.path=sonar-report.json -Dsonar.issuesReport.console.enable=true | tee response.txt
+   ${SONARQUBE_SCANNER_PATH}bin/sonar-scanner -Dsonar.projectKey=${PROJECT} ${SONAR_LOGIN} -Dsonar.go.coverage.reportPaths=tests/results/cover.out -Dsonar.exclusions=vendor/**,cmd/**,pkg/connectors/**,pkg/schema/**,pkg/handlers/*_test.go,pkg/validator/*_test.go,swaggerui/**,tests/**,*.json,*.txt,*.yml,*.xml,*.sh,Dockerfile -Dsonar.issuesReport.json.enable=true -Dsonar.report.export.path=sonar-report.json -Dsonar.issuesReport.console.enable=true | tee response.txt
    # response text includes the url to view the json payload of the sonar scanner results
    url=$(cat response.txt | grep -o "${SONARQUBE_HOST}/api/ce/task?id=[A-Za-z0-9\-]*")
    # loop until we have a valid payload
