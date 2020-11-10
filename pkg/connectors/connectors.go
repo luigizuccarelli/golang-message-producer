@@ -1,12 +1,10 @@
 package connectors
 
 import (
-	"crypto/tls"
 	"fmt"
 	"os"
-	"strings"
 
-	"github.com/Shopify/sarama"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/microlib/simple"
 )
 
@@ -20,60 +18,53 @@ type Clients interface {
 }
 
 type Connectors struct {
-	Producer sarama.SyncProducer
+	Producer *kafka.Producer
 	Logger   *simple.Logger
 	Name     string
 }
 
 func NewClientConnectors(logger *simple.Logger) Clients {
-
-	logger.Trace("Creating Kafka message producer")
-
-	cfg := sarama.NewConfig()
-	cfg.Producer.RequiredAcks = sarama.WaitForAll // Wait for all in-sync replicas to ack the message
-	cfg.Producer.Retry.Max = 10                   // Retry up to 10 times to produce the message
-	cfg.Producer.Return.Successes = true
-
-	cfg.Net.TLS.Config = &tls.Config{
-		//Certificates: []tls.Certificate{crt},
-		InsecureSkipVerify: true,
-	}
-
-	brokerList := strings.Split(os.Getenv("KAFKA_BROKERS"), ",")
-	logger.Info(fmt.Sprintf("Kafka brokers: %s", strings.Join(brokerList, ", ")))
-
-	p, err := sarama.NewSyncProducer(brokerList, cfg)
+	logger.Trace("Creating kafka connections for message producer")
+	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": os.Getenv("KAFKA_BROKERS")})
 	if err != nil {
-		logger.Error(fmt.Sprintf("Failed to start Sarama producer : %v", err))
+		logger.Error(fmt.Sprintf("Creating kafka connections %v", err))
+		panic(err)
 	}
 
+	//defer p.Close()
 	return &Connectors{Producer: p, Logger: logger, Name: "RealConnectors"}
 }
 
 func (conn *Connectors) SendMessageSync(b []byte) error {
 	// We are not setting a message key, which means that all messages will
 	// be distributed randomly over the different partitions.
-	partition, offset, err := conn.Producer.SendMessage(&sarama.ProducerMessage{
-		Topic: os.Getenv("TOPIC"),
-		Value: sarama.ByteEncoder(b),
-	})
+	// Delivery report handler for produced messages
+	go func() {
+		for e := range conn.Producer.Events() {
+			switch ev := e.(type) {
+			case *kafka.Message:
+				if ev.TopicPartition.Error != nil {
+					conn.Error(fmt.Sprintf("Delivery failed message to %v", ev.TopicPartition))
+				} else {
+					conn.Info(fmt.Sprintf("Delivered message to %v", ev.TopicPartition))
+				}
+			}
+		}
+	}()
 
-	if err != nil {
-		conn.Error(fmt.Sprintf("Failed to store your data: %v", err))
-		return err
-	} else {
-		// The tuple (topic, partition, offset) can be used as a unique identifier
-		// for a message in a Kafka cluster.
-		conn.Debug(fmt.Sprintf("Your data is stored with unique identifier important /%d/%d", partition, offset))
-	}
+	topic := os.Getenv("TOPIC")
+	err := conn.Producer.Produce(&kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+		Value:          b,
+	}, nil)
 
-	return nil
+	//conn.Producer.Flush(100)
+
+	return err
 }
 
 func (conn *Connectors) Close() {
-	if err := conn.Producer.Close(); err != nil {
-		conn.Error(fmt.Sprintf("Failed to shut down data collector cleanly %v", err))
-	}
+	conn.Producer.Close()
 }
 
 func (conn *Connectors) Error(msg string, val ...interface{}) {

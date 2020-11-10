@@ -3,6 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>handlers: Go Coverage Report</title>
 		<style>
 			body {
 				background: black;
@@ -56,7 +57,7 @@
 				
 				<option value="file0">gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/handlers/handlers.go (100.0%)</option>
 				
-				<option value="file1">gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/validator/validate.go (100.0%)</option>
+				<option value="file1">gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/validator/validate.go (92.9%)</option>
 				
 				</select>
 			</div>
@@ -73,14 +74,12 @@
 		<pre class="file" id="file0" style="display: none">package handlers
 
 import (
-        "encoding/json"
         "fmt"
         "io/ioutil"
         "net/http"
         "os"
 
         "gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/connectors"
-        "gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/schema"
 )
 
 const (
@@ -90,8 +89,7 @@ const (
 
 // StreamHandler a http response and request for a message producer
 func StreamHandler(w http.ResponseWriter, r *http.Request, conn connectors.Clients) <span class="cov8" title="1">{
-
-        var response *schema.Response
+        var response string
 
         addHeaders(w, r)
         if r.Method == "OPTIONS" </span><span class="cov8" title="1">{
@@ -102,20 +100,22 @@ func StreamHandler(w http.ResponseWriter, r *http.Request, conn connectors.Clien
 
         <span class="cov8" title="1">body, err := ioutil.ReadAll(r.Body)
         if err != nil </span><span class="cov8" title="1">{
-                response = &amp;schema.Response{StatusCode: "500", Status: "ERROR", Message: "Could not read body data " + err.Error()}
+                response = `{"statuscode": "500", "status": "ERROR", "message": "Could not read body data"}`
+                conn.Error("StreamHandler could not read body data %v", err)
                 w.WriteHeader(http.StatusInternalServerError)
         }</span> else<span class="cov8" title="1"> {
                 err = conn.SendMessageSync(body)
                 if err != nil </span><span class="cov8" title="1">{
-                        response = &amp;schema.Response{StatusCode: "500", Status: "ERROR", Message: "Could not send stream data " + err.Error()}
+                        response = `{"statuscode": "500", "status": "ERROR", "message": "Could not send stream data " + err.Error() +"}`
+                        conn.Error("StreamHandler could not send stream data %v", err)
                         w.WriteHeader(http.StatusInternalServerError)
                 }</span> else<span class="cov8" title="1"> {
-                        response = &amp;schema.Response{StatusCode: "200", Status: "OK", Message: "Stream data sent successfully"}
+                        response = `{"statuscode": "200", "status": "OK", "message": "Stream data sent successfully"}`
+                        w.WriteHeader(http.StatusOK)
                 }</span>
         }
 
-        <span class="cov8" title="1">b, _ := json.MarshalIndent(response, "", "        ")
-        fmt.Fprintf(w, string(b))</span>
+        <span class="cov8" title="1">fmt.Fprintf(w, response)</span>
 }
 
 // IsAlive a http response and request wrapper for health endpoint checks
@@ -155,7 +155,7 @@ func checkEnvar(item string, logger *simple.Logger) error <span class="cov8" tit
                 if required </span><span class="cov8" title="1">{
                         logger.Error(fmt.Sprintf("%s envar is mandatory please set it", name))
                         return errors.New(fmt.Sprintf("%s envar is mandatory please set it", name))
-                }</span> else<span class="cov8" title="1"> {
+                }</span> else<span class="cov0" title="0"> {
                         logger.Error(fmt.Sprintf("%s envar is empty please set it", name))
                 }</span>
         }

@@ -1,0 +1,28 @@
+FROM registry.access.redhat.com/ubi8/ubi-init:latest
+
+LABEL maintainer="lzuccarelli@tfd.ie"
+
+# gcc for cgo
+RUN dnf install -y gcc make && rm -rf /var/lib/apt/lists/*
+
+ENV GOLANG_VERSION 1.15.3
+ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
+ENV GOLANG_DOWNLOAD_SHA256 010a88df924a81ec21b293b5da8f9b11c176d27c0ee3962dc1738d2352d3c02d
+
+RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
+	&& echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - \
+	&& tar -C /usr/local -xzf golang.tar.gz \
+	&& rm golang.tar.gz
+
+ENV PATH $PATH:/bin:/usr/local/go/bin:/usr/bin/
+
+RUN mkdir -p /go/src /go/bin && chmod -R 755 /go
+COPY bin/* uid_entrypoint.sh build/microservice /go/ 
+
+RUN rpm -iv /go/librdkafka-0.11.5-1.el8.x86_64.rpm && rm -rf /go/lib*
+WORKDIR /go
+
+USER 1001
+
+ENTRYPOINT [ "./uid_entrypoint.sh" ]
+

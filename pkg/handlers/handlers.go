@@ -1,14 +1,12 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 
 	"gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/connectors"
-	"gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/schema"
 )
 
 const (
@@ -18,8 +16,7 @@ const (
 
 // StreamHandler a http response and request for a message producer
 func StreamHandler(w http.ResponseWriter, r *http.Request, conn connectors.Clients) {
-
-	var response *schema.Response
+	var response string
 
 	addHeaders(w, r)
 	if r.Method == "OPTIONS" {
@@ -30,20 +27,22 @@ func StreamHandler(w http.ResponseWriter, r *http.Request, conn connectors.Clien
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response = &schema.Response{StatusCode: "500", Status: "ERROR", Message: "Could not read body data " + err.Error()}
+		response = `{"statuscode": "500", "status": "ERROR", "message": "Could not read body data"}`
+		conn.Error("StreamHandler could not read body data %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	} else {
 		err = conn.SendMessageSync(body)
 		if err != nil {
-			response = &schema.Response{StatusCode: "500", Status: "ERROR", Message: "Could not send stream data " + err.Error()}
+			response = `{"statuscode": "500", "status": "ERROR", "message": "Could not send stream data " + err.Error() +"}`
+			conn.Error("StreamHandler could not send stream data %v", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
-			response = &schema.Response{StatusCode: "200", Status: "OK", Message: "Stream data sent successfully"}
+			response = `{"statuscode": "200", "status": "OK", "message": "Stream data sent successfully"}`
+			w.WriteHeader(http.StatusOK)
 		}
 	}
 
-	b, _ := json.MarshalIndent(response, "", "	")
-	fmt.Fprintf(w, string(b))
+	fmt.Fprintf(w, response)
 }
 
 // IsAlive a http response and request wrapper for health endpoint checks
