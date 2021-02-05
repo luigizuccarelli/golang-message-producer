@@ -55,9 +55,9 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/handlers/handlers.go (100.0%)</option>
+				<option value="file0">gitea-devops-shared-threefld-cicd.apps.c4.us-east-1.dev.aws.ocp.14west.io/cicd/trackmate-message-producer/pkg/handlers/handlers.go (100.0%)</option>
 				
-				<option value="file1">gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/validator/validate.go (92.9%)</option>
+				<option value="file1">gitea-devops-shared-threefld-cicd.apps.c4.us-east-1.dev.aws.ocp.14west.io/cicd/trackmate-message-producer/pkg/validator/validate.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -79,7 +79,7 @@ import (
         "net/http"
         "os"
 
-        "gitea-cicd.apps.aws2-dev.ocp.14west.io/cicd/trackmate-message-producer/pkg/connectors"
+        "gitea-devops-shared-threefld-cicd.apps.c4.us-east-1.dev.aws.ocp.14west.io/cicd/trackmate-message-producer/pkg/connectors"
 )
 
 const (
@@ -155,7 +155,7 @@ func checkEnvar(item string, logger *simple.Logger) error <span class="cov8" tit
                 if required </span><span class="cov8" title="1">{
                         logger.Error(fmt.Sprintf("%s envar is mandatory please set it", name))
                         return errors.New(fmt.Sprintf("%s envar is mandatory please set it", name))
-                }</span> else<span class="cov0" title="0"> {
+                }</span> else<span class="cov8" title="1"> {
                         logger.Error(fmt.Sprintf("%s envar is empty please set it", name))
                 }</span>
         }

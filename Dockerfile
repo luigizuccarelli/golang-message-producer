@@ -2,9 +2,9 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
 
 LABEL maintainer="lzuccarelli@tfd.ie"
 
-RUN mkdir -p /go/src /go/bin && chmod -R 755 /go
-COPY uid_entrypoint.sh build/microservice /go/ 
-
+RUN mkdir -p /go/src /go/bin && chmod -R 0755 /go/
+COPY uid_entrypoint.sh build/microservice /go/
+RUN chown 1001:root /go
 WORKDIR /go
 
 USER 1001
