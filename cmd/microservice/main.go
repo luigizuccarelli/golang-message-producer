@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"os"
 
-	"gitea-devops-shared-threefld-cicd.apps.c4.us-east-1.dev.aws.ocp.14west.io/cicd/trackmate-message-producer/pkg/connectors"
-	"gitea-devops-shared-threefld-cicd.apps.c4.us-east-1.dev.aws.ocp.14west.io/cicd/trackmate-message-producer/pkg/handlers"
-	"gitea-devops-shared-threefld-cicd.apps.c4.us-east-1.dev.aws.ocp.14west.io/cicd/trackmate-message-producer/pkg/validator"
+	"/pkg/connectors"
+	"/pkg/handlers"
+	"/pkg/validator"
+
 	"github.com/gorilla/mux"
 	"github.com/microlib/simple"
 )

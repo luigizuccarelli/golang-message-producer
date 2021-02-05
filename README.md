@@ -44,3 +44,6 @@ go tool cover -html=tests/results/cover.out -o tests/results/cover.html
 curl -k -H 'Token: xxxxx' -w '@curl-timing.txt'  http://127.0.0.1:9000/api/v1/sys/info/isalive
 
 ```
+
+## Update for openshift
+- removed all references to GOCD

@@ -1,6 +1,0 @@
-github.com/confluentinc/confluent-kafka-go v1.5.2 h1:l+qt+a0Okmq0Bdr1P55IX4fiwFJyg0lZQmfHkAFkv7E=
-github.com/confluentinc/confluent-kafka-go v1.5.2/go.mod h1:u2zNLny2xq+5rWeTQjFHbDzzNuba4P1vo31r9r4uAdg=
-github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
-github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
-github.com/microlib/simple v1.0.1 h1:hkJjfQg0PejJUJ6XiNG/1hxJa6dDsf3EPSh9ZbWDLjc=
-github.com/microlib/simple v1.0.1/go.mod h1:AIAkCaaQxDOkppDihi2iI0xOHak5dJjGtzGS35H8lcQ=
