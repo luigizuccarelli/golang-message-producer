@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"/pkg/connectors"
-	"/pkg/handlers"
-	"/pkg/validator"
+	"lmzsoftware.com/lzuccarelli/golang-message-producer/pkg/connectors"
+	"lmzsoftware.com/lzuccarelli/golang-message-producer/pkg/handlers"
+	"lmzsoftware.com/lzuccarelli/golang-message-producer/pkg/validator"
 
 	"github.com/gorilla/mux"
 	"github.com/microlib/simple"
